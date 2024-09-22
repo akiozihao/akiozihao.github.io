@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Xv6 on XIMI</title><link>https://blog.ximi2333.com/tags/xv6/</link><description>Recent content in Xv6 on XIMI</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 19 Sep 2024 23:30:18 +0800</lastBuildDate><atom:link href="https://blog.ximi2333.com/tags/xv6/index.xml" rel="self" type="application/rss+xml"/><item><title>gdb-debug</title><link>https://blog.ximi2333.com/p/gdb-debug/</link><pubDate>Thu, 19 Sep 2024 23:30:18 +0800</pubDate><guid>https://blog.ximi2333.com/p/gdb-debug/</guid><description>&lt;h1 id="使用-gdb-debug-xv6">使用 gdb debug xv6
+&lt;/h1>&lt;ol>
+&lt;li>&lt;code>make CPUS=1 qemu-gdb&lt;/code> 启动qemu，打开 gdb-server，可以看到这里server的端口号是&lt;code>25501&lt;/code>
+&lt;img src="https://blog.ximi2333.com/p/gdb-debug/server1.png"
+width="2316"
+height="116"
+srcset="https://blog.ximi2333.com/p/gdb-debug/server1_hu3850050232096947390.png 480w, https://blog.ximi2333.com/p/gdb-debug/server1_hu1000045879395772644.png 1024w"
+loading="lazy"
+alt="gdb server"
+class="gallery-image"
+data-flex-grow="1996"
+data-flex-basis="4791px"
+>&lt;/li>
+&lt;li>另起terminal &lt;code>/opt/homebrew/bin/riscv64-elf-gdb&lt;/code> 打开 gdb-client&lt;/li>
+&lt;li>&lt;code>target remote 127.0.0.1:25501&lt;/code> 与 server 建立连接&lt;/li>
+&lt;li>&lt;code>b _entry&lt;/code> 设置入口断点&lt;/li>
+&lt;li>&lt;code>c&lt;/code> 跳转到入口处，可以发现代码没有停在0x8000000,而是停在0x8000000a，&lt;code>kernel/kernel.sam&lt;/code>里可以看到
+&lt;code> 8000000a: f14025f3 csrr a1,mhartid&lt;/code> 读取了系统寄存器 &lt;code>mhartid&lt;/code> 并将结果加载到了 &lt;code>a1&lt;/code> 寄存器中。&lt;code>0x8000000&lt;/code>是被qemu认可的地址，使用qemu的时候第一个指令地址必须是这个特定地址。&lt;code>kernel/kernel.ld&lt;/code>里可以看到是从这个地址开始读
+&lt;img src="https://blog.ximi2333.com/p/gdb-debug/kernelld.png"
+width="1070"
+height="390"
+srcset="https://blog.ximi2333.com/p/gdb-debug/kernelld_hu11686169919600089489.png 480w, https://blog.ximi2333.com/p/gdb-debug/kernelld_hu4951810290585211593.png 1024w"
+loading="lazy"
+alt="kernelld"
+class="gallery-image"
+data-flex-grow="274"
+data-flex-basis="658px"
+>&lt;/li>
+&lt;li>&lt;code>si&lt;/code> 执行下一条指令&lt;/li>
+&lt;li>&lt;code>b main&lt;/code> 在main.c 打点&lt;/li>
+&lt;li>&lt;code>layout split&lt;/code> 分割视图
+&lt;img src="https://blog.ximi2333.com/p/gdb-debug/layout.png"
+width="1980"
+height="294"
+srcset="https://blog.ximi2333.com/p/gdb-debug/layout_hu12450329247391309038.png 480w, https://blog.ximi2333.com/p/gdb-debug/layout_hu18376405991472704728.png 1024w"
+loading="lazy"
+alt="layout"
+class="gallery-image"
+data-flex-grow="673"
+data-flex-basis="1616px"
+>&lt;/li>
+&lt;li>&lt;code>n&lt;/code> next&lt;/li>
+&lt;li>&lt;code>p&lt;/code> print&lt;/li>
+&lt;li>&lt;code>s&lt;/code> step into&lt;/li>
+&lt;li>&lt;code>del 3&lt;/code> 删除断点3&lt;/li>
+&lt;/ol>
+&lt;h2 id="参考">参考：
+&lt;/h2>&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_130.html" target="_blank" rel="noopener"
+>https://ftp.gnu.org/old-gnu/Manuals/gdb/html_node/gdb_130.html&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://ftp.gnu.org/old-gnu/Manuals/gdb/html_chapter/gdb_19.html" target="_blank" rel="noopener"
+>layout:https://ftp.gnu.org/old-gnu/Manuals/gdb/html_chapter/gdb_19.html&lt;/a>&lt;/p>
+&lt;/blockquote>
+&lt;blockquote>
+&lt;p>&lt;a class="link" href="https://www.bilibili.com/video/BV1rS4y1n7y1/?p=2&amp;amp;vd_source=fcca71b554b349a93525c9acd148c2cf" target="_blank" rel="noopener"
+>https://www.bilibili.com/video/BV1rS4y1n7y1/?p=2&amp;amp;vd_source=fcca71b554b349a93525c9acd148c2cf&lt;/a>&lt;/p>
+&lt;/blockquote></description></item></channel></rss>
